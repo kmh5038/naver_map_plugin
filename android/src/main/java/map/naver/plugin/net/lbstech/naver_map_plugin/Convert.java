@@ -3,6 +3,8 @@ package map.naver.plugin.net.lbstech.naver_map_plugin;
 import android.annotation.SuppressLint;
 import android.graphics.Color;
 import android.graphics.PointF;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 
 import com.naver.maps.geometry.LatLng;
 import com.naver.maps.geometry.LatLngBounds;
@@ -182,6 +184,20 @@ class Convert {
         String assetName = (String) o;
         String key = FlutterMain.getLookupKeyForAsset(assetName);
         return OverlayImage.fromAsset(key);
+    }
+
+    private static final Map<Object, OverlayImage> cachedOverlayImage = new HashMap();
+
+    static OverlayImage toOverlayImageFromBitmap(Object bitMapCacheKey, Object o) {
+        if (cachedOverlayImage.containsKey(bitMapCacheKey)) {
+            return cachedOverlayImage.get(bitMapCacheKey);
+        } else {
+            byte[] bytes = (byte[]) o;
+            Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+            OverlayImage oi = OverlayImage.fromBitmap(bitmap);
+            cachedOverlayImage.put(bitMapCacheKey, oi);
+            return oi;
+        }
     }
 
     static List<LatLng> toCoords(Object o) {
