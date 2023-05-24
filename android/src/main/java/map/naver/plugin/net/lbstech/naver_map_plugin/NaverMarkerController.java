@@ -65,8 +65,10 @@ class NaverMarkerController {
         for (Object json : jsonArray) {
             String id = (String) json;
             MarkerController marker = idToController.get(id);
-            marker.setOnClickListener(null);
-            marker.setMap(null);
+            if (marker != null) {
+                marker.setOnClickListener(null);
+                marker.setMap(null);
+            }
             idToController.remove(id);
         }
     }

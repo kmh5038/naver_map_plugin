@@ -1,5 +1,6 @@
 import 'dart:async';
-import 'dart:ui';
+import 'dart:typed_data';
+import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
 import 'package:naver_map_plugin/naver_map_plugin.dart';
@@ -20,30 +21,100 @@ class _MarkerMapPageState extends State<MarkerMapPage> {
 
   @override
   void initState() {
-    WidgetsBinding.instance.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      /*
       OverlayImage.fromAssetImage(
         assetName: 'icon/marker.png',
         devicePixelRatio: window.devicePixelRatio,
-      ).then((image) {
-        setState(() {
-          _markers.add(Marker(
-              markerId: 'id',
-              position: LatLng(37.563600, 126.962370),
-              captionText: "커스텀 아이콘",
-              captionColor: Colors.indigo,
-              captionTextSize: 20.0,
-              alpha: 0.8,
-              captionOffset: 30,
-              icon: image,
-              anchor: AnchorPoint(0.5, 1),
-              width: 45,
-              height: 45,
-              infoWindow: '인포 윈도우',
-              onMarkerTab: _onMarkerTap));
-        });
+      )*/
+
+      Uint8List bitmap = await createCustomMarkerBitmap("타이틀", textStyle: TextStyle(fontSize: 30, color: Colors.black));
+      OverlayImage overlayImage = OverlayImage.fromBitmap("bitmapCacheKey", bitmap);
+
+      setState(() {
+        _markers.add(Marker(
+            markerId: 'id',
+            position: LatLng(37.563600, 126.962370),
+            captionText: "커스텀 아이콘",
+            captionColor: Colors.indigo,
+            captionTextSize: 20.0,
+            alpha: 0.8,
+            captionOffset: 30,
+            icon: overlayImage,
+            anchor: AnchorPoint(0.5, 1),
+            width: 45,
+            height: 45,
+            infoWindow: '인포 윈도우',
+            onMarkerTab: _onMarkerTap));
       });
     });
+
     super.initState();
+  }
+
+  Future<Uint8List> createCustomMarkerBitmap(String title,
+      {required TextStyle textStyle,
+        Color backgroundColor = Colors.blueAccent}) async {
+    TextSpan span = TextSpan(
+      style: textStyle,
+      text: title,
+    );
+    TextPainter painter = TextPainter(
+      text: span,
+      textAlign: TextAlign.center,
+      textDirection: ui.TextDirection.ltr,
+    );
+    painter.text = TextSpan(
+      text: title.toString(),
+      style: textStyle,
+    );
+    ui.PictureRecorder pictureRecorder = ui.PictureRecorder();
+    Canvas canvas = Canvas(pictureRecorder);
+    painter.layout();
+    painter.paint(canvas, const Offset(20.0, 10.0));
+    int textWidth = painter.width.toInt();
+    int textHeight = painter.height.toInt();
+    canvas.drawRRect(
+        RRect.fromLTRBAndCorners(0, 0, textWidth + 44, textHeight + 24,
+            bottomLeft: const Radius.circular(10),
+            bottomRight: const Radius.circular(10),
+            topLeft: const Radius.circular(10),
+            topRight: const Radius.circular(10)
+        ),
+        Paint()..color = Colors.black.withAlpha(100)
+    );
+
+    canvas.drawRRect(
+        RRect.fromLTRBAndCorners(0, 0, textWidth + 40, textHeight + 20,
+            bottomLeft: const Radius.circular(10),
+            bottomRight: const Radius.circular(10),
+            topLeft: const Radius.circular(10),
+            topRight: const Radius.circular(10)
+        ),
+        Paint()..color = backgroundColor
+    );
+
+    var arrowPath2 = Path();
+    arrowPath2.moveTo((textWidth + 44) / 2 - 15, textHeight + 24);
+    arrowPath2.lineTo((textWidth + 44) / 2, textHeight + 44);
+    arrowPath2.lineTo((textWidth + 44) / 2 + 15, textHeight + 24);
+    arrowPath2.close();
+    canvas.drawPath(arrowPath2, Paint()..color = Colors.black.withAlpha(100));
+
+    var arrowPath = Path();
+    arrowPath.moveTo((textWidth + 40) / 2 - 15, textHeight + 20);
+    arrowPath.lineTo((textWidth + 40) / 2, textHeight + 40);
+    arrowPath.lineTo((textWidth + 40) / 2 + 15, textHeight + 20);
+    arrowPath.close();
+    canvas.drawPath(arrowPath, Paint()..color = backgroundColor);
+
+    painter.layout();
+    painter.paint(canvas, const Offset(20.0, 10.0));
+    ui.Picture p = pictureRecorder.endRecording();
+    ByteData? pngBytes = await (await p.toImage(
+        painter.width.toInt() + 44, painter.height.toInt() + 54))
+        .toByteData(format: ui.ImageByteFormat.png);
+    return Uint8List.view(pngBytes!.buffer);
   }
 
   @override
@@ -175,14 +246,14 @@ class _MarkerMapPageState extends State<MarkerMapPage> {
     }
   }
 
-  void _onMarkerTap(Marker marker, Map<String, int> iconSize) {
-    int pos = _markers.indexWhere((m) => m.markerId == marker.markerId);
+  void _onMarkerTap(Marker? marker, Map<String, int?> iconSize) {
+    int pos = _markers.indexWhere((m) => m.markerId == marker!.markerId);
     setState(() {
       _markers[pos].captionText = '선택됨';
     });
     if (_currentMode == MODE_REMOVE) {
       setState(() {
-        _markers.removeWhere((m) => m.markerId == marker.markerId);
+        _markers.removeWhere((m) => m.markerId == marker!.markerId);
       });
     }
   }
