@@ -51,9 +51,13 @@ class NaverMarkerController {
                 idToController.put(marker.id, marker);
             }
             handler.post(()->{
-               List<MarkerController> markers = new ArrayList(idToController.values());
-                for (MarkerController marker : markers) {
-                    marker.setMap(naverMap);
+                try {
+                    List<MarkerController> markers = new ArrayList(idToController.values());
+                    for (MarkerController marker : markers) {
+                        marker.setMap(naverMap);
+                    }
+                } catch (Exception e) {
+                    Log.e("add", e.getMessage());
                 }
             });
         });
