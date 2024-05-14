@@ -222,7 +222,7 @@ public class NaverMapBuilder implements NaverMapOptionSink {
 
     @Override
     public void setLocale(String locale) {
-        options.locale(Locale(locale));
+        options.locale(new Locale(locale));
     }
 
     void setInitialCameraPosition(Map<String, Object> cameraPosition) {

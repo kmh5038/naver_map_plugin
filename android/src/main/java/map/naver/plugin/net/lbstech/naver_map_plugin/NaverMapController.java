@@ -639,7 +639,7 @@ public class NaverMapController implements
 
     @Override
     public void setLocale(String locale) {
-        naverMap.setLocale(Locale(locale));
+        naverMap.setLocale(new Locale(locale));
     }
 
 }
