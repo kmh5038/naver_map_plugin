@@ -10,6 +10,7 @@ import com.naver.maps.map.NaverMapOptions;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Locale;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import io.flutter.plugin.common.BinaryMessenger;
@@ -221,7 +222,7 @@ public class NaverMapBuilder implements NaverMapOptionSink {
 
     @Override
     public void setLocale(String locale) {
-        options.locale(locale);
+        options.locale(Locale(locale));
     }
 
     void setInitialCameraPosition(Map<String, Object> cameraPosition) {
