@@ -37,6 +37,7 @@ class NaverMap extends StatefulWidget {
     this.polygons = const [],
     this.minZoom = 0.0,
     this.maxZoom = 21.0,
+    this.locale = "ko"
   }) : super(key: key);
 
   /// 지도가 완전히 만들어진 후에 컨트롤러를 파라미터로 가지는 콜백.
@@ -227,6 +228,8 @@ class NaverMap extends StatefulWidget {
   /// ## 최대 줌 레벨 제한 ##
   /// default 21.0
   final double maxZoom;
+
+  final String locale;
 
   @override
   _NaverMapState createState() => _NaverMapState();
@@ -451,6 +454,7 @@ class _NaverMapOptions {
     this.useSurface,
     this.maxZoom,
     this.minZoom,
+    this.locale
   });
 
   static _NaverMapOptions fromWidget(NaverMap map) {
@@ -473,6 +477,7 @@ class _NaverMapOptions {
       useSurface: map.useSurface,
       maxZoom: map.maxZoom,
       minZoom: map.minZoom,
+      locale: map.locale,
     );
   }
 
@@ -494,6 +499,7 @@ class _NaverMapOptions {
   final bool? useSurface;
   final double? maxZoom;
   final double? minZoom;
+  final String? locale;
 
   Map<String, dynamic> toMap() {
     final Map<String, dynamic> optionsMap = <String, dynamic>{};
@@ -524,6 +530,7 @@ class _NaverMapOptions {
     addIfNonNull('useSurface', useSurface);
     addIfNonNull('maxZoom', maxZoom);
     addIfNonNull('minZoom', minZoom);
+    addIfNonNull('locale', locale);
     addIfNonNull(
         'contentPadding',
         contentPadding != null

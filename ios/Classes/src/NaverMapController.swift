@@ -21,7 +21,8 @@ protocol NaverMapOptionSink {
     func setContentPadding(_ paddingData: Array<CGFloat>)
     func setMaxZoom(_ maxZoom: Double)
     func setMinZoom(_ minZoom: Double)
-    
+    func setLocale(_ locale: String)
+
     func setRotationGestureEnable(_ rotationGestureEnable: Bool)
     func setScrollGestureEnable(_ scrollGestureEnable: Bool)
     func setTiltGestureEnable(_ tiltGestureEnable: Bool)
@@ -359,6 +360,9 @@ class NaverMapController: NSObject, FlutterPlatformView, NaverMapOptionSink, NMF
         if let minZoom = option["minZoom"] as? Double{
             sink.setMinZoom(minZoom)
         }
+        if let locale = option["locale"] as? String{
+            sink.setLocale(locale)
+        }
     }
     
     // Naver touch Delegate method
@@ -495,7 +499,11 @@ class NaverMapController: NSObject, FlutterPlatformView, NaverMapOptionSink, NMF
     func setMinZoom(_ minZoom: Double){
         mapView!.minZoomLevel = minZoom
     }
-    
+
+    func setLocale(_ locale: String) {
+        mapView!.locale = locale
+    }
+
     // ===================== authManagerDelegate ========================
     func authorized(_ state: NMFAuthState, error: Error?) {
         switch state {

@@ -17,6 +17,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Locale;
 
 import io.flutter.view.FlutterMain;
 
@@ -61,6 +62,8 @@ class Convert {
             sink.setMaxZoom((Double) options.get("maxZoom"));
         if (options.containsKey("minZoom"))
             sink.setMinZoom((Double) options.get("minZoom"));
+        if (options.containsKey("locale"))
+            sink.setLocale((String) options.get("locale"));
     }
 
     @SuppressWarnings("unchecked")

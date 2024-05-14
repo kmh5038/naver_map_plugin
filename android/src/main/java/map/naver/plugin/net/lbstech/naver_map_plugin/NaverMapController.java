@@ -34,6 +34,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Locale;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import io.flutter.Log;
@@ -635,4 +636,10 @@ public class NaverMapController implements
         }
         naverMap.setMinZoom(minZoom);
     }
+
+    @Override
+    public void setLocale(String locale) {
+        naverMap.setLocale(Locale(locale));
+    }
+
 }

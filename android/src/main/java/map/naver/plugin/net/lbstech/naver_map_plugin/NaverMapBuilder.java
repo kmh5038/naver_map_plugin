@@ -219,6 +219,11 @@ public class NaverMapBuilder implements NaverMapOptionSink {
         options.minZoom(minZoom);
     }
 
+    @Override
+    public void setLocale(String locale) {
+        options.locale(locale);
+    }
+
     void setInitialCameraPosition(Map<String, Object> cameraPosition) {
         options.camera(Convert.toCameraPosition(cameraPosition));
     }
