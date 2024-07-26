@@ -58,7 +58,7 @@ class NaverMarkerController {
                         marker.setMap(naverMap);
                     }
                 } catch (Exception e) {
-                    Log.e("add", e.getMessage());
+                    //Log.e("add", e.getMessage());
                 }
             });
         });

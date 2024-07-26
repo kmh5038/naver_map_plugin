@@ -401,7 +401,7 @@ public class NaverMapController implements
             fos.close();
             result = file.getPath();
         } catch (IOException e) {
-            Log.e("takeCapture", e.getMessage());
+            //Log.e("takeCapture", e.getMessage());
         }
         HashMap<String, String> arg = new HashMap<>(2);
         arg.put("path", result);
