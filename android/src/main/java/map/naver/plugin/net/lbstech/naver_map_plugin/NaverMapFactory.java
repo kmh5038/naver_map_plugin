@@ -31,6 +31,7 @@ public class NaverMapFactory extends PlatformViewFactory {
     @SuppressWarnings({"unchecked", "ConstantConditions"})
     @Override
     public PlatformView create(Context context, int i, Object args) {
+        Convert.init(context);
         Map<String, Object> params = (Map<String, Object>) args;
         NaverMapBuilder builder = new NaverMapBuilder();
 
